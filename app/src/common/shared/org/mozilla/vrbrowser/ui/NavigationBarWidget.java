@@ -286,7 +286,12 @@ public class NavigationBarWidget extends UIWidget implements GeckoSession.Naviga
         mIsInFocusMode = true;
         AnimationHelper.fadeIn(mFocusModeContainer, AnimationHelper.FADE_ANIMATION_DURATION);
         AnimationHelper.fadeOut(mNavigationContainer, 0);
-        mWidgetManager.fadeOutWorld();
+
+        GeckoSession currentSession = SessionStore.get().getCurrentSession();
+        boolean isPrivateMode = currentSession.getSettings().getBoolean(GeckoSessionSettings.USE_PRIVATE_MODE);
+        if (!isPrivateMode) {
+            mWidgetManager.fadeOutWorld();
+        }
 
         if (mLastBrowserSize != null)
             mBrowserWidget.handleResizeEvent(mLastBrowserSize.x, mLastBrowserSize.y);
@@ -306,7 +311,13 @@ public class NavigationBarWidget extends UIWidget implements GeckoSession.Naviga
         mIsInFocusMode = false;
         AnimationHelper.fadeIn(mNavigationContainer, AnimationHelper.FADE_ANIMATION_DURATION);
         AnimationHelper.fadeOut(mFocusModeContainer, 0);
-        mWidgetManager.fadeInWorld();
+
+        GeckoSession currentSession = SessionStore.get().getCurrentSession();
+        boolean isPrivateMode = currentSession.getSettings().getBoolean(GeckoSessionSettings.USE_PRIVATE_MODE);
+        if (!isPrivateMode) {
+            mWidgetManager.fadeInWorld();
+        }
+
         mLastBrowserSize = mBrowserWidget.getLastWorldSize();
         setResizePreset(1.0f);
 
